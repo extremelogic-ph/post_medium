@@ -5,14 +5,14 @@ PostMedium is a command-line Java application that uses the Medium API to publis
 
 ## Prerequisites
 
-1. Java Development Kit (JDK) 8 or higher. You can download it [here](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
+1. Java Development Kit (JDK) 17 or higher. You can download it [here](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).
 2. An IDE such as IntelliJ IDEA or Eclipse, or a simple text editor if you're comfortable working from the command line.
 3. A Medium account with a valid Integration Token. You can get this by [Creating a new integration](https://medium.com/me/settings/security) within your Medium settings. See integration tokens.
 4. Your Medium author ID. This is the unique identifier associated with your Medium account.
 
 ## Setup
 
-1. Clone the PostMedium repository from GitHub. (The repository link will be available soon)
+1. Clone the PostMedium repository from GitHub. [post medium](https://github.com/extremelogic-ph/post_medium)
 2. Open the project in your preferred IDE.
 3. Update `application.yaml` file located in `./resources` directory with your Medium account's `integration-token`, `author-id`, and other necessary details. The file should look like this:
 
