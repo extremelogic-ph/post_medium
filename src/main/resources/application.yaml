@@ -1,0 +1,11 @@
+medium:
+  account:
+    integration-token:
+    author-id:
+  content-format: markdown
+  tags:
+  publish-status: public
+  canonical-url:
+  file:
+  file-path:
+  api-base-url: https://api.medium.com/v1/users/${medium.account.author-id}/posts
