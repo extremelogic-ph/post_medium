@@ -40,10 +40,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import ph.extremelogic.web.postmedium.dto.MediumRequest;
+import ph.extremelogic.web.postmedium.dto.MediumUserResponse;
 
 /**
  * The main application class for posting to Medium.
@@ -58,6 +58,8 @@ import ph.extremelogic.web.postmedium.dto.MediumRequest;
 public class PostMediumApplication implements CommandLineRunner {
     private static final String AUTHORIZATION = "Authorization";
     private static final String CONTENT_TYPE = "Content-Type";
+
+    private final String MEDIUM_ME_URL = "https://api.medium.com/v1/me";
 
 
     @Value("${medium.account.integration-token}")
@@ -116,15 +118,42 @@ public class PostMediumApplication implements CommandLineRunner {
         SpringApplication.run(PostMediumApplication.class, args);
     }
 
+    public MediumUserResponse getMediumUserInfo() {
+        var restTemplate = new RestTemplate();
+        try {
+            var headers = new HttpHeaders();
+            headers.add(AUTHORIZATION, "Bearer " + token);
+            headers.add(CONTENT_TYPE, "application/json");
+
+            var entity = new HttpEntity<>(headers);
+
+            ResponseEntity<MediumUserResponse> response = restTemplate.exchange(
+                    MEDIUM_ME_URL,
+                    HttpMethod.GET,
+                    entity,
+                    MediumUserResponse.class
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return response.getBody();
+            } else {
+                throw new RuntimeException("Failed to fetch user info. HTTP Status: " + response.getStatusCode());
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Error while fetching user info: " + ex.getMessage());
+        }
+    }
+
     /**
      * Sends a POST request to Medium to publish a new post.
      *
      * @throws URISyntaxException If the URI syntax is invalid.
      * @throws IOException        If an I/O error occurs.
      */
-    private void post() throws URISyntaxException, IOException {
+    private void post(String userId) throws URISyntaxException, IOException {
         var restTemplate = new RestTemplate();
-        var uri = new URI(baseUrl);
+        var resolvedUrl = baseUrl.replace("<userId>", userId);
+        var uri = new URI(resolvedUrl);
         var content = readFile(filePath, file, StandardCharsets.UTF_8);
 
         var headers = new HttpHeaders();
@@ -178,7 +207,8 @@ public class PostMediumApplication implements CommandLineRunner {
     public void run(String... args) {
         if (validParams()) {
             try {
-                post();
+                var user = getMediumUserInfo();
+                post(user.getData().getId());
             } catch (IOException | URISyntaxException e) {
                 log.error("Unable to post {} {}", contentFormat,
                     e.getLocalizedMessage());

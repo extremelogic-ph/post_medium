@@ -8,4 +8,4 @@ medium:
   canonical-url:
   file:
   file-path:
-  api-base-url: https://api.medium.com/v1/users/${medium.account.author-id}/posts
+  api-base-url: https://api.medium.com/v1/users/<userId>/posts

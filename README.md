@@ -8,26 +8,26 @@ PostMedium is a command-line Java application that uses the Medium API to publis
 1. Java Development Kit (JDK) 17 or higher. You can download it [here](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).
 2. An IDE such as IntelliJ IDEA or Eclipse, or a simple text editor if you're comfortable working from the command line.
 3. A Medium account with a valid Integration Token. You can get this by [Creating a new integration](https://medium.com/me/settings/security) within your Medium settings. See integration tokens.
-4. Your Medium author ID. This is the unique identifier associated with your Medium account.
+4. Your Medium author ID. This is the unique identifier associated with your Medium account without the @ sign.
 
 ## Setup
 
 1. Clone the PostMedium repository from GitHub. [post medium](https://github.com/extremelogic-ph/post_medium)
 2. Open the project in your preferred IDE.
-3. Update `application.yaml` file located in `./resources` directory with your Medium account's `integration-token`, `author-id`, and other necessary details. The file should look like this:
+3. Update `application.yaml` file located in `./resources` directory with your Medium account's `integration-token`, and other necessary details. The file should look like this:
 
 ```yaml
 medium:
   account:
     integration-token: <Your Medium integration token here>
-    author-id: <Your Medium author id here>
+    author-id: <Your Medium author id here without the @ sign>
   content-format: markdown
-  tags: <Comma separated tags for your post>
+  tags: <Comma separated tags for your post e.g. java,springboot >
   publish-status: public
-  canonical-url: <Canonical URL of the post>
-  file: <Markdown file name>
-  file-path: <Path where the markdown file is located>
-  api-base-url: https://api.medium.com/v1/users/${medium.account.author-id}/posts
+  canonical-url: <Optional canonical URL of the post>
+  file: <Markdown file name e.g. blog.md>
+  file-path: <Path where the markdown file is located e.g. /path/to/file >
+  api-base-url: https://api.medium.com/v1/users/<userId>/posts
 
 ```
 4. Save your markdown document in the directory specified in `file-path`. Ensure the name of the markdown file matches the name provided in `file`.
